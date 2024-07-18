@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    <div class="box columns m-5 is-flex is-vcentered">
+        <div class="field column is-half">
+            <div class="control ">
+                <label class="label" for="translation-entry">Text to translate</label><textarea
+                    class="textarea is-link has-fixed-size "
+                    oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' id="translation-entry"
+                    placeholder="Got anything to translate?"> {{ csrf_input }} </textarea>
+
+            </div>
+        </div>
+        <i class="fa-solid fa-language"></i>
+        <div class="field column is-half">
+            <label class="label">Translation</label>
+            <div class="select is-link pb-3" id="translation_language_chooser">
+                <select>
+                    <option id="EN-US" class="is-active">English</option>
+                    <option id="PL">Polish</option>
+                    <option id="DE">German</option>
+                    <option id="RU">Russian</option>
+                    <option id="ES">Spanish</option>
+                </select>
+            </div>
+            <div class="control py-3">
+                <h2>Google Translate <i class="fa-brands fa-google"></i></h2>
+                <textarea maxlength="1000" class="textarea id is-link has-fixed-size " id="transalated"
+                          placeholder="Here will be your translation from Google" readonly></textarea>
+            </div>
+            <div class="control py-3">
+                <h2>Deepl Translate <i class="fa-solid fa-globe"></i></h2>
+                <textarea class="textarea id is-link has-fixed-size " id="deepl_transalated"
+                          placeholder="Here will be your translation from Deepl" readonly></textarea>
+            </div>
+            <div class="control py-3">
+                <h2>Groq Translate <i class="fa-solid fa-robot"></i></h2>
+                <textarea class="textarea id is-link has-fixed-size " id="groq_transalated"
+                          placeholder="Here will be your translation from Groq" readonly></textarea>
+            </div>
+            <div class="control py-3">
+                <h2>GPT 3.5 Translate <i class="fa-solid fa-robot"></i></h2>
+                <textarea class="textarea id is-link has-fixed-size " id="gpt_transalated"
+                          placeholder="Here will be your translation from GPT" readonly></textarea>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="https://kit.fontawesome.com/3daef64643.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+            integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+
+{% csrf_token %}
+    <script>
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        var oldVal = "";
+        var debounceTimeout;
+
+        $("#translation-entry, #translation_language_chooser").on("input", function () {
+            clearTimeout(debounceTimeout);
+            debounceTimeout = setTimeout(function () {
+                $("#transalated").addClass("is-loading")
+                console.log('loading')
+                var currentVal = $("#translation-entry").val();
+                if (currentVal === oldVal) {
+                    return;
+                }
+                $.ajax({
+                    url: "/api/translate/",
+                    type: "POST",
+                    headers: {'X-CSRFToken': csrftoken},
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        to_translate: currentVal,
+                        target_lang_code: $("#translation_language_chooser option:selected").attr('id'),
+                        target_lang_name: $("#translation_language_chooser option:selected").val(),
+
+                    }),
+                    success: function (data) {
+                        $("#transalated").val(data.translation)
+                        $("#groq_transalated").val(data.groq_translation)
+                        $("#gpt_transalated").val(data.gpt_translation)
+                        $("#deepl_transalated").val(data.deepl_translation)
+
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        console.error('Error:', xhr.responseText);
+                        alert('Translation failed: ' + xhr.responseText);
+                    }
+                });
+                $("#translation-entry").removeClass("is-loading")
+                console.log('loaded')
+            }, 500);
+        });
+    </script>
+{% endblock %}
+
