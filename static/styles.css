@@ -3,4 +3,6 @@
 .box {
 	--bulma-box-shadow: 0 0em 3em -0.125em hsla(260, 100%, 50%, 0.216),
 		0 0px 0 1px hsla(300, 97%, 49%, 0.042);
+
 }
+

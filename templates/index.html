@@ -1,50 +1,65 @@
 {% extends 'base.html' %}
 
-{% block body %}
-    <div class="box columns m-5 is-flex is-vcentered">
-        <div class="field column is-half">
-            <div class="control ">
-                <label class="label" for="translation-entry">Text to translate</label><textarea
-                    class="textarea is-link has-fixed-size "
-                    oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' id="translation-entry"
-                    placeholder="Got anything to translate?"> {{ csrf_input }} </textarea>
 
+
+{% block body %}
+    <div class="container py-5">
+        <div class="columns is-variable is-8">
+            <div class="box column is-centered p-5 m-0" style="">
+                <h1 class="has-text-weight-bold is-size-3 has-text-centered">Text to be translated</h1>
+                {#                <label class="label " for="">Select source language</label>#}
+                <div class="select is-link mb-3" id="translation_language_chooser">
+                    <select>
+                        <option id="AUTO">Auto</option>
+                    </select>
+                </div>
+                <div class="control" style="height: 100%">
+                    {#                    <h2>Put the text for translation here</h2>#}
+                    <textarea
+                            class="textarea is-link   has-fixed-size"
+                            id="translation-entry"
+                            placeholder="Got anything to translate?"
+                            style="height: 100%"></textarea>
+                </div>
             </div>
-        </div>
-        <i class="fa-solid fa-language"></i>
-        <div class="field column is-half">
-            <label class="label">Translation</label>
-            <div class="select is-link pb-3" id="translation_language_chooser">
-                <select>
-                    <option id="EN-US" class="is-active">English</option>
-                    <option id="PL">Polish</option>
-                    <option id="DE">German</option>
-                    <option id="RU">Russian</option>
-                    <option id="ES">Spanish</option>
-                </select>
-            </div>
-            <div class="control py-3">
-                <h2>Google Translate <i class="fa-brands fa-google"></i></h2>
-                <textarea maxlength="1000" class="textarea id is-link has-fixed-size " id="transalated"
-                          placeholder="Here will be your translation from Google" readonly></textarea>
-            </div>
-            <div class="control py-3">
-                <h2>Deepl Translate <i class="fa-solid fa-globe"></i></h2>
-                <textarea class="textarea id is-link has-fixed-size " id="deepl_transalated"
-                          placeholder="Here will be your translation from Deepl" readonly></textarea>
-            </div>
-            <div class="control py-3">
-                <h2>Groq Translate <i class="fa-solid fa-robot"></i></h2>
-                <textarea class="textarea id is-link has-fixed-size " id="groq_transalated"
-                          placeholder="Here will be your translation from Groq" readonly></textarea>
-            </div>
-            <div class="control py-3">
-                <h2>GPT 3.5 Translate <i class="fa-solid fa-robot"></i></h2>
-                <textarea class="textarea id is-link has-fixed-size " id="gpt_transalated"
-                          placeholder="Here will be your translation from GPT" readonly></textarea>
+
+            <div class="column is-0"></div>
+            <div class=" box column p-5">
+                <h1 class="has-text-weight-bold is-size-3 has-text-centered">Translation</h1>
+                {#                <label class="label " for="">Select target language</label>#}
+                <div class="select is-link pb-3 " id="translation_language_chooser">
+                    <select>
+                        <option id="EN-US" class="is-active">English</option>
+                        <option id="PL">Polish</option>
+                        <option id="DE">German</option>
+                        <option id="RU">Russian</option>
+                        <option id="ES">Spanish</option>
+                    </select>
+                </div>
+                <div class="control py-2">
+                    <h2 class="ml-2">Google Translate <i class="fa-brands fa-google"></i></h2>
+                    <textarea class="textarea id  is-link has-fixed-size " id="transalated"
+                              placeholder="Here will be your translation from Google" readonly ></textarea>
+                </div>
+                <div class="control py-2">
+                    <h2 class="ml-2">Deepl Translate <i class="fa-solid fa-globe"></i></h2>
+                    <textarea class="textarea id is-link  has-fixed-size " id="deepl_transalated"
+                              placeholder="Here will be your translation from Deepl" readonly></textarea>
+                </div>
+                <div class="control py-2">
+                    <h2 class="ml-2">Groq <i class="fa-solid fa-robot"></i></h2>
+                    <textarea class="textarea id is-link  has-fixed-size " id="groq_transalated"
+                              placeholder="Here will be your translation from Groq" readonly></textarea>
+                </div>
+                <div class="control py-2">
+                    <h2 class="ml-2">GPT 3.5 <i class="fa-solid fa-robot"></i></h2>
+                    <textarea class="textarea id is-link  has-fixed-size " id="gpt_transalated"
+                              placeholder="Here will be your translation from GPT" readonly></textarea>
+                </div>
             </div>
         </div>
     </div>
+
 {% endblock %}
 
 {% block scripts %}
@@ -55,7 +70,7 @@
 
 
 
-{% csrf_token %}
+    {% csrf_token %}
     <script>
         const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
         var oldVal = "";
@@ -93,7 +108,7 @@
                         alert('Translation failed: ' + xhr.responseText);
                     }
                 });
-                $("#translation-entry").removeClass("is-loading")
+
                 console.log('loaded')
             }, 500);
         });

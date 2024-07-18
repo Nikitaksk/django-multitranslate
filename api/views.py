@@ -1,15 +1,10 @@
-from django.http import HttpResponse
-from django.shortcuts import render
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-import requests
-import json
-from .serializers import textSerializer
 import deepl
 from easygoogletranslate import EasyGoogleTranslate
 from groq import Groq
-from .s_key import openai_key, openai_org_key, groq_key, deepl_key
+from .s_key import openai_key, groq_key, deepl_key
 from openai import OpenAI
 
 
@@ -24,7 +19,7 @@ class textApiView(APIView):
             messages=[
                 {
                     "role": "user",
-                    "content": f'give me the translation for phrase {to_translate} to {target_lang_name}. Please, give me the most commonly used variant. Dont write anything except translation please',
+                    "content": f'give me the translation for phrase {to_translate} to {target_lang_name}. Please, give me the most commonly used variant. Dont write anything except pure translation please',
                 }
             ],
             model="llama3-8b-8192",
@@ -42,7 +37,7 @@ class textApiView(APIView):
             messages=[
                 {
                     "role": "user",
-                    "content": f'give me the translation for phrase {to_translate} to {target_lang_name}. Please, give me the most commonly used variant. Dont write anything except translation please',
+                    "content": f'give me the translation for phrase {to_translate} to {target_lang_name}. Please, give me the most commonly used variant. Dont write anything except pure translation',
                 }
             ],
             model="gpt-3.5-turbo",
@@ -67,10 +62,8 @@ class textApiView(APIView):
             "groq_translation": self.groq_translate(to_translate, target_lang_name),
             # "gpt_translation": self.gpt_translate(to_translate, target_lang_name),
             "gpt_translation": "Disabled",
-            # "deepl_translation" :self.deepl_translate(to_translate, target_lang_code),
+            # "deepl_translation": self.deepl_translate(to_translate, target_lang_code),
             "deepl_translation": "Disabled",
-
         }
-
         response = Response(value, status=status.HTTP_200_OK)
         return response
