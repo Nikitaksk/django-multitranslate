@@ -42,7 +42,7 @@ class textApiView(APIView):
             ],
             model="gpt-3.5-turbo",
         )
-        print(chat_completion.choices[0].message.content)
+        # print(chat_completion.choices[0].message.content)
         return chat_completion.choices[0].message.content
 
     def post(self, request):
@@ -50,6 +50,8 @@ class textApiView(APIView):
         to_translate = data.get("to_translate")
         target_lang_code = data.get("target_lang_code")
         target_lang_name = data.get("target_lang_name")
+
+        print(f'{to_translate =}', f'{target_lang_code = }', f'{target_lang_name =}')
 
         if to_translate == "":
             return Response({"translation": "",

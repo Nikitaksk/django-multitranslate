@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+from api.s_key import django_key
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -19,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-61!oqfkulz*^^&fkx(qwvgy#hnju0esn3og5g7aqqxp%ih%j_g'
+SECRET_KEY = django_key
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -39,7 +40,6 @@ INSTALLED_APPS = [
     'api',
     'app',
     'users',
-    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -56,11 +56,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'MultiTran.urls'
 
-CORS_ALLOWED_ORIGINS = [
-    "http://127.0.0.1:5500",
-    "http://localhost:5500",
-    # Add other allowed origins as needed
-]
+
 
 TEMPLATES = [
     {
