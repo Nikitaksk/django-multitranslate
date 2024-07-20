@@ -25,7 +25,7 @@ SECRET_KEY = django_key
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', 'multitranslate.eu.pythonanywhere.com']
 
 # Application definition
 
@@ -56,12 +56,11 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'MultiTran.urls'
 
-
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates', BASE_DIR / 'app', BASE_DIR / 'app' / 'templates']
+        'DIRS': [BASE_DIR / 'templates', BASE_DIR / 'app', BASE_DIR / 'app' / 'templates',
+                 '/home/multitranslate/django-multitranslate/templates']
         ,
         'APP_DIRS': True,
         'OPTIONS': {
@@ -122,6 +121,7 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
+    '/home/multitranslate/django-multitranslate/static',
 ]
 
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

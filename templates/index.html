@@ -13,7 +13,7 @@
                 <h2 class="ml-2"><i class="fa-solid fa-language"></i></h2>
                 <div class="control" style="height: 100%">
                     <textarea
-                            class="textarea is-link   has-fixed-size"
+                            class="textarea is-link  has-fixed-size"
                             id="translation-entry"
                             placeholder="Got anything to translate?"
                             style="height: 100%"></textarea>
@@ -31,22 +31,22 @@
                         <option id="ES">Spanish</option>
                     </select>
                 </div>
-                <div class="control py-2">
+                <div id="google_output" class="control py-2 ">
                     <h2 class="ml-2">Google Translate <i class="fa-brands fa-google"></i></h2>
                     <textarea class="textarea id  is-link has-fixed-size " id="transalated"
                               placeholder="Here will be your translation from Google" readonly></textarea>
                 </div>
-                <div class="control py-2">
+                <div id="deepl_output" class="control py-2">
                     <h2 class="ml-2">Deepl Translate <i class="fa-solid fa-globe"></i></h2>
                     <textarea class="textarea id is-link  has-fixed-size " id="deepl_transalated"
                               placeholder="Here will be your translation from Deepl" readonly></textarea>
                 </div>
-                <div class="control py-2">
+                <div id="groq_output" class="control py-2">
                     <h2 class="ml-2">Groq <i class="fa-solid fa-robot"></i></h2>
                     <textarea class="textarea id is-link  has-fixed-size " id="groq_transalated"
                               placeholder="Here will be your translation from Groq" readonly></textarea>
                 </div>
-                <div class="control py-2">
+                <div id="gpt_output" class="control py-2">
                     <h2 class="ml-2">GPT 3.5 <i class="fa-solid fa-robot"></i></h2>
                     <textarea class="textarea id is-link  has-fixed-size " id="gpt_transalated"
                               placeholder="Here will be your translation from GPT" readonly></textarea>
@@ -66,11 +66,19 @@
         const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
         var oldVal = "";
         var debounceTimeout;
+        const google_out = $("#google_output");
+        const deelp_out = $("#deepl_output")
+        const groq_out = $("#groq_output")
+        const gpt_out = $("#gpt_output")
+
         $("#translation-entry, #translation_language_chooser").on("input", function () {
             clearTimeout(debounceTimeout);
+            google_out.addClass("is-loading")
+            deelp_out.addClass("is-loading")
+            groq_out.addClass("is-loading")
+            gpt_out.addClass("is-loading")
             debounceTimeout = setTimeout(function () {
-                $("#transalated").addClass("is-loading")
-                console.log('loading')
+                
                 var currentVal = $("#translation-entry").val();
                 if (currentVal === oldVal) {
                     return;
@@ -97,7 +105,12 @@
                         alert('Translation failed: ' + xhr.responseText);
                     }
                 });
-                console.log('loaded')
+                google_out.removeClass("is-loading")
+                deelp_out.removeClass("is-loading")
+                groq_out.removeClass("is-loading")
+                gpt_out.removeClass("is-loading")
+                {#location.reload();#}
+                {#console.log('loaded')#}
             }, 500);
         });
     </script>
